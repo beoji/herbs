@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+
+{% load catalog_extras %}
+
+{% block content %}
+
+<h1 class="title">
+	{{ shop.name }}
+</h1>
+
+{% for supplement in shop.supplement_set.all %}
+<div>
+    <p>
+        <span class="tag is-black" style="background-color:{{ supplement.category.color }};">
+        {{ supplement.name }}</span>
+    </p>
+</div>
+{% endfor %}
+
+{% endblock content %}

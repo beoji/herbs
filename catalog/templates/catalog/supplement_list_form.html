@@ -1,0 +1,144 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h1 class="title">
+	Supplements
+</h1>
+
+{% if request.session.item_cost %}
+  <p>Daily min cost: {{ request.session.daily_cost_min_sum }} zł</p>
+  <p>Daily max cost: {{ request.session.daily_cost_max_sum }} zł</p>
+  <p>Monthly min cost: {{ request.session.monthly_cost_min_sum }} zł</p>
+  <p>Monthly max cost: {{ request.session.monthly_cost_max_sum }} zł</p>
+  <p>Items cost: {{ request.session.item_cost }} zł</p>
+{% endif %}
+
+<div class="columns">
+  <div class="column is-right">
+    <form method="get">
+      <div class="field is-grouped is-horizontal">
+        <div class="control">
+          <input class="input is-primary" type="search" name="search" value="{{ request.GET.search }}" placeholder="Search"/>
+        </div>
+        <div class="control">
+          <input class="button is-link is-light" type="submit" value="Search"/>
+        </div>
+        <div class="control">
+          <a class="button is-link is-light" href="{% url 'supplement_list' %}">Reset</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+	<thead>
+    <tr>
+      <th></th>
+      <th><a href="?q=name">Name</a></th>
+      <th><a href="?q=polish_name">Polish name</a></th>
+      <th><a href="?q=category">Category</a></th>
+      <th><a href="?q=item_price">Price</a></th>
+      <th><a href="?q=daily_cost_min">Min. daily $</a></th>
+      <th><a href="?q=daily_cost_max">Max. daily $</a></th>
+      <th><a href="?q=shop">Shop</a></th>
+      <th><a href="?q=url">Url</a></th>
+      {% if request.user.is_authenticated and request.user.is_staff %}
+      <th></th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+
+    <form method="post" action="{% url 'supplement_list' %}">
+    {% csrf_token %}
+
+    <div class="field">
+      <div class="control">
+          <input class="button is-link is-light" type="submit" value="Get cost">
+      </div>
+    </div>
+    
+    {% for supplement in supplements %}
+    <tr>
+      <td>
+        {% if request.user in supplement.users.all %}
+          <input type="checkbox" name="{{ supplement.pk }}" id="{{ supplement.pk }}" checked>
+        {% else %}
+          <input type="checkbox" name="{{ supplement.pk }}" id="{{ supplement.pk }}">
+        {% endif %}
+      </td>
+      <td>
+        <a href="{% url 'supplement_detail' slug=supplement.slug %}">{{ supplement.name }}</a>
+      </td>
+      <td>
+        {% if supplement.polish_name %}
+          <a href="{% url 'supplement_detail' slug=supplement.slug %}">{{ supplement.polish_name }}</a>
+        {% else %}
+          <span class="is-italic has-text-weight-light">Unknown</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if supplement.category %}
+          <span class="tag is-black" style="background-color:{{ supplement.category.color }};">
+            {{ supplement.category.name }}
+          </span>
+        {% else %}
+          <span class="is-italic has-text-weight-light">Unknown</span>
+        {% endif %}   
+      </td>
+      <td>
+        {% if supplement.item_price %}
+          {{ supplement.item_price }}
+        {% else %}
+          <span class="is-italic has-text-weight-light">Unknown</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if supplement.daily_cost_min %}
+          {{ supplement.daily_cost_min }}
+        {% else %}
+          <span class="is-italic has-text-weight-light">Unknown</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if supplement.daily_cost_max %}
+          {{ supplement.daily_cost_max }}
+        {% else %}
+          <span class="is-italic has-text-weight-light">Unknown</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if supplement.shop %}
+        <a href="{% url 'shop_detail' supplement.shop.pk %}">{{ supplement.shop.name }}</a>
+        {% else %}
+          <span class="is-italic has-text-weight-light">Unknown</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if supplement.url %}
+        <a href="{{ supplement.url }}" target="_blank">Link</a>
+        {% else %}
+          <span class="is-italic has-text-weight-light">Unknown</span>
+        {% endif %}
+      </td>
+      {% if request.user.is_authenticated and request.user.is_staff %}
+      <td>
+        <div class="field is-grouped submit-buttons">
+          <div class="control">
+            <a type="button" class="button is-link is-light is-small" href="{% url 'supplement_update' supplement.slug %}">U</a>
+          </div>
+        </div>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+
+    </form>
+
+  </tbody>
+</table>
+
+{% endblock content %}

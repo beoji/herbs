@@ -1,0 +1,78 @@
+{% extends 'index.html' %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+<h1 class="title">
+	Dodaj suplement
+</h1>
+
+<div class="columns is-centered">
+	<form class="column is-full-mobile is-half-tablet" method="post" novalidate>
+		{% csrf_token %}
+		{% for hidden_field in form.hidden_fields %}
+		{{ hidden_field }}
+		{% endfor %}
+
+		{% for error in form.non_field_errors %}
+		<p class="help is-danger">{{ error }}</p>
+		{% endfor %}
+
+		{% for field in form.visible_fields %}
+
+
+		{% if field.name == 'tags' or field.name == 'neurotransmitters' %}
+		<div class="field">
+			<div class="select is-multiple" style="width:100%">
+				<label class="label">{{ field.label_tag }}</label>
+				{% for error in field.errors %}
+				<p class="help is-danger">{{ error }}</p>
+	            {% endfor %}
+            	<div class="control">
+				{% render_field field class='input is-success' %}
+				</div>
+			</div>
+		</div>
+		{% elif field.name == 'description' %}
+		<div class="field">
+			<label class="label">{{ field.label_tag }}</label>
+			{% for error in field.errors %}
+			<p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+            <div class="control">
+			{% render_field field class='textarea is-success' rows='5' %}
+			</div>
+		</div>
+		{% else %}
+		<div class="field">
+            <label class="label">{{ field.label_tag }}</label>
+            
+			{% for error in field.errors %}
+			<p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+            
+			<div class="control">
+				{% render_field field class='input is-success' %}
+            </div>
+            
+			{% if field.help_text %}
+			<p class="help">{{ field.help_text }}</p>
+			{% endif %}
+		</div>
+		{% endif %}
+        {% endfor %}
+
+        <div class="field is-grouped submit-buttons">
+			<div class="control">
+				<button type="submit" class="button is-link">Zapisz</button>
+			</div>
+			<div class="control">
+				<a type="button" class="button is-link is-light" href="{% url 'supplement_list' %}">Anuluj</a>
+			</div>
+		</div>
+
+	</form>
+</div>
+
+{% endblock %}

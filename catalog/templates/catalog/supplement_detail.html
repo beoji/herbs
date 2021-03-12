@@ -1,0 +1,132 @@
+{% extends 'index.html' %}
+
+{% load catalog_extras %}
+
+{% block content %}
+
+<h1 class="title">
+	{{ supplement.name }}
+</h1>
+
+{% if request.user.is_authenticated and request.user.is_staff %}
+<div class="field is-grouped submit-buttons">
+    <div class="control">
+        <a type="button" class="button is-link is-light" href="{% url 'supplement_update' object.slug %}">Update</a>
+    </div>
+</div>
+{% endif %}
+
+{% if supplement.category %}
+    <div>
+        <p>
+            <span>Category: </span>
+            <span class="tag is-black" style="background-color:{{ supplement.category.color }};">{{ supplement.category.name }}</span>
+        </p>
+    </div><br>
+{% endif %}
+
+<div>
+    <p>
+        <span>Tags: </span>
+        {% for tag in supplement.tags.all %}
+        <span class="tag" >{{ tag.name }}</span>
+        {% endfor %}
+    </p>
+</div><br>
+
+<div>
+    <p>
+        <span>Neurotransmitters: </span>
+        {% for n in supplement.neurotransmitters.all %}
+        <span class="tag is-black" style="background-color:{{ n.color }};">{{ n.name }}</span>
+        {% endfor %}
+    </p>
+</div><br>
+
+{% if supplement.item_price %}
+<div>
+    <span>Item price: </span>
+    <span>{{ supplement.item_price }} zł</span>
+</div>
+{% endif %}
+
+{% if supplement.item_weight %}
+<div>
+    <span>Item weight: </span>
+    <span>{{ supplement.item_weight|floatformat:2 }} g</span>
+</div>
+{% endif %}
+
+{% if supplement.portion_weight_min %}
+<div>
+    <span>Portion weight min: </span>
+    <span>{{ supplement.portion_weight_min|multiply:1000|floatformat }} mg</span>
+</div>
+{% endif %}
+
+{% if supplement.portion_weight_max %}
+<div>
+    <span>Portion weight max: </span>
+    <span>{{ supplement.portion_weight_max|multiply:1000|floatformat }} mg</span>
+</div>
+{% endif %}
+
+{% if supplement.daily_cost_min %}
+<div>
+    <span>Daily cost min: </span>
+    <span>{{ supplement.daily_cost_min }} zł</span>
+</div>
+{% endif %}
+
+{% if supplement.daily_cost_max %}
+<div>
+    <span>Daily cost max: </span>
+    <span>{{ supplement.daily_cost_max }} zł</span>
+</div>
+{% endif %}
+
+{% if supplement.daily_intakes_min %}
+<div>
+    <span>Daily intakes min: </span>
+    <span>{{ supplement.daily_intakes_min }}</span>
+</div>
+{% endif %}
+
+{% if supplement.daily_intakes_max %}
+<div>
+    <span>Daily intakes max: </span>
+    <span>{{ supplement.daily_intakes_max }}</span>
+</div>
+{% endif %}
+
+{% if supplement.meal_relation %}
+<div>
+    <span>Meal relation: </span>
+    <span>{{ supplement.meal_relation }}</span>
+</div>
+{% endif %}
+
+{% if supplement.country_of_origin %}
+<div>
+    <span>Country of origin: </span>
+    <span>{{ supplement.country_of_origin }}</span>
+</div>
+{% endif %}
+
+{% if supplement.date_of_discovery %}
+<div>
+    <span>Date of discovery: </span>
+    <span>{{ supplement.date_of_discovery }}</span>
+</div>
+{% endif %}
+
+{% if supplement.bioavailability %}
+<div>
+    <span>Bioavailability: </span>
+    <span>{{ supplement.bioavailability }}</span>
+</div>
+{% endif %}
+
+<div class="text">{{ supplement.description }}</div>
+
+{% endblock content %}

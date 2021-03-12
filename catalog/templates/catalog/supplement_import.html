@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+	{% if form %}
+	<form method="post" enctype="multipart/form-data">
+		<div class="buttons has-addons">
+		{% csrf_token %}
+		{% for field in form.visible_fields %}
+		{{ field.errors }}
+		<div class="file has-name">
+			{% render_field field class="" %}
+			<button class="button is-primary" type="submit">Upload</button>
+		</div>
+		{% endfor %}	
+		
+		</div>
+	</form>
+	{% endif %}
+
+	{% if imported %}
+		{% for e in imported %}
+			<p>{{ e.name }}</p>
+		{% endfor %}
+	{% endif %}
+
+	{% if rejected %}
+		{% for r in rejected %}
+			<p class="has-text-danger">{{ r.name }}</p>
+		{% endfor %}
+	{% endif %}
+
+	<div><a href="{% url 'supplement_list' %}">Return to home</a></div>
+
+{% endblock %}
