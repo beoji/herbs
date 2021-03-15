@@ -86,7 +86,6 @@ DATABASES = {
         'PASSWORD': 'eae72f370378362e4f12d84677a6aa65411d9e6ab65cee8b84979ae52b7af63d',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
