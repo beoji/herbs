@@ -78,11 +78,14 @@ WSGI_APPLICATION = 'herbs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd3i3lc44230tuo',
+        'HOST': 'ec2-176-34-222-188.eu-west-1.compute.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'mlexbyjnylfhrd',
+        'PASSWORD': 'eae72f370378362e4f12d84677a6aa65411d9e6ab65cee8b84979ae52b7af63d',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
