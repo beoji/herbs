@@ -113,3 +113,8 @@ class Supplement(models.Model):
 
     class Meta:
         ordering = ['name']
+
+
+class Visitor(models.Model):
+    ip = models.GenericIPAddressField()
+    timestamp = models.DateTimeField(auto_now_add=True)

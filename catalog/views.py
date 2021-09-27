@@ -4,15 +4,26 @@ from django.views.generic import DetailView, FormView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Supplement, Shop
+from .models import Supplement, Shop, Visitor
 from .forms import SupplementImportForm, SupplementForm
 
 import csv
 import io
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 def supplement_list(request):
     c = {}
+    ip = get_client_ip(request)
+    v = Visitor.objects.create(ip=ip)
     c['supplements'] = Supplement.objects.all()
     if request.user.is_authenticated:
         if request.method == 'GET':
